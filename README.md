@@ -1,11 +1,14 @@
-# Spryker Commerce OS
+# PriceProductStorage Module
+[![Build Status](https://travis-ci.org/spryker/PriceProductStorage.svg)](https://travis-ci.org/spryker/PriceProductStorage)
+[![Coverage Status](https://coveralls.io/repos/github/spryker/PriceProductStorage/badge.svg)](https://coveralls.io/github/spryker/PriceProductStorage)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spryker/PriceProductStorage/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spryker/PriceProductStorage/?branch=master)
 
-## Core Modules
+## Installation
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spryker/spryker-core/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spryker/spryker-core/?branch=master)
+```
+composer require spryker/price-storage
+```
 
-### Links
-- **[Spryker Documentation](https://academy.spryker.com/)**
-- [Spryker Architecture-Sniffer](https://github.com/spryker/architecture-sniffer)
-- [Spryker Code-Sniffer](https://github.com/spryker/code-sniffer)
-- [Spryker Code-Generator](https://github.com/spryker/code-generator)
+## Documentation
+
+[Spryker Documentation](https://spryker.github.io)
