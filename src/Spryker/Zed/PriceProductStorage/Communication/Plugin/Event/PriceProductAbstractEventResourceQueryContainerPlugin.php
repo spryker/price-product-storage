@@ -19,7 +19,7 @@ use Spryker\Zed\PriceProduct\Dependency\PriceProductEvents;
  * @method \Spryker\Zed\PriceProductStorage\Business\PriceProductStorageFacadeInterface getFacade()
  * @method \Spryker\Zed\PriceProductStorage\Communication\PriceProductStorageCommunicationFactory getFactory()
  */
-class PriceProductAbstractEventResourcePlugin extends AbstractPlugin implements EventResourceQueryContainerPluginInterface
+class PriceProductAbstractEventResourceQueryContainerPlugin extends AbstractPlugin implements EventResourceQueryContainerPluginInterface
 {
     /**
      * Specification:
