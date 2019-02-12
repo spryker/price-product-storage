@@ -9,22 +9,21 @@ namespace Spryker\Zed\PriceProductStorage\Communication\Plugin\Event\Listener;
 
 use Spryker\Zed\Event\Dependency\Plugin\EventBulkHandlerInterface;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
-use Spryker\Zed\PriceProduct\Dependency\PriceProductEvents;
 use Spryker\Zed\PropelOrm\Business\Transaction\DatabaseTransactionHandlerTrait;
 
 /**
- * @deprecated Use `\Spryker\Zed\PriceProductStorage\Communication\Plugin\Event\Listener\PriceTypeProductAbstractStoragePublishListener` and `\Spryker\Zed\PriceProductStorage\Communication\Plugin\Event\Listener\PriceTypeProductAbstractStorageUnpublishListener` instead.
- *
  * @method \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageQueryContainerInterface getQueryContainer()
  * @method \Spryker\Zed\PriceProductStorage\Communication\PriceProductStorageCommunicationFactory getFactory()
  * @method \Spryker\Zed\PriceProductStorage\Business\PriceProductStorageFacadeInterface getFacade()
  * @method \Spryker\Zed\PriceProductStorage\PriceProductStorageConfig getConfig()
  */
-class PriceTypeProductAbstractStorageListener extends AbstractPlugin implements EventBulkHandlerInterface
+class PriceTypeProductAbstractStoragePublishListener extends AbstractPlugin implements EventBulkHandlerInterface
 {
     use DatabaseTransactionHandlerTrait;
 
     /**
+     * {@inheritdoc}
+     *
      * @api
      *
      * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
@@ -38,10 +37,6 @@ class PriceTypeProductAbstractStorageListener extends AbstractPlugin implements 
         $priceTypeIds = $this->getFactory()->getEventBehaviorFacade()->getEventTransferIds($eventTransfers);
         $productAbstractIds = $this->getQueryContainer()->queryAllProductAbstractIdsByPriceTypeIds($priceTypeIds)->find()->getData();
 
-        if ($eventName === PriceProductEvents::ENTITY_SPY_PRICE_TYPE_CREATE || $eventName === PriceProductEvents::ENTITY_SPY_PRICE_TYPE_UPDATE) {
-            $this->getFacade()->publishPriceProductAbstract($productAbstractIds);
-        } elseif ($eventName === PriceProductEvents::ENTITY_SPY_PRICE_TYPE_DELETE) {
-            $this->getFacade()->unpublishPriceProductAbstract($productAbstractIds);
-        }
+        $this->getFacade()->publishPriceProductAbstract($productAbstractIds);
     }
 }
