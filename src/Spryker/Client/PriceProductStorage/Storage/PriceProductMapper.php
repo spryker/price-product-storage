@@ -93,8 +93,15 @@ class PriceProductMapper implements PriceProductMapperInterface
      */
     protected function setPriceData(PriceProductTransfer $priceProductTransfer, array $prices): PriceProductTransfer
     {
+        $moneyValueTransfer = $priceProductTransfer->getMoneyValue();
+
         if (isset($prices[PriceProductStorageConfig::PRICE_DATA])) {
-            $priceProductTransfer->getMoneyValue()->setPriceData($prices[PriceProductStorageConfig::PRICE_DATA]);
+            $priceData = $prices[PriceProductStorageConfig::PRICE_DATA_BY_PRICE_TYPE][$priceProductTransfer->getPriceTypeName()] ?? $prices[PriceProductStorageConfig::PRICE_DATA];
+            $moneyValueTransfer->setPriceData($priceData);
+        }
+
+        if (isset($prices[PriceProductStorageConfig::PRICE_DATA_BY_PRICE_TYPE])) {
+            $moneyValueTransfer->setPriceDataByPriceType($prices[PriceProductStorageConfig::PRICE_DATA_BY_PRICE_TYPE]);
         }
 
         return $priceProductTransfer;
