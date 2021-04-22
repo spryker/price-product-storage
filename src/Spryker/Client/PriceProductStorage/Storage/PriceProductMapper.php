@@ -60,6 +60,8 @@ class PriceProductMapper implements PriceProductMapperInterface
         array $prices,
         string $currencyCode
     ): void {
+        $priceProductTransfer = null;
+
         foreach (PriceProductStorageConfig::PRICE_MODES as $priceMode) {
             if (!isset($prices[$priceMode])) {
                 continue;
@@ -93,8 +95,8 @@ class PriceProductMapper implements PriceProductMapperInterface
     {
         $moneyValueTransfer = $priceProductTransfer->getMoneyValue();
 
-        if (isset($prices[PriceProductStorageConfig::PRICE_DATA])) {
-            $priceData = $prices[PriceProductStorageConfig::PRICE_DATA_BY_PRICE_TYPE][$priceProductTransfer->getPriceTypeName()] ?? $prices[PriceProductStorageConfig::PRICE_DATA];
+        $priceData = $this->resolvePriceData($priceProductTransfer, $prices);
+        if ($priceData !== null) {
             $moneyValueTransfer->setPriceData($priceData);
         }
 
@@ -106,9 +108,20 @@ class PriceProductMapper implements PriceProductMapperInterface
     }
 
     /**
+     * @param \Generated\Shared\Transfer\PriceProductTransfer $priceProductTransfer
+     * @param array $prices
+     *
+     * @return string|null
+     */
+    protected function resolvePriceData(PriceProductTransfer $priceProductTransfer, array $prices): ?string
+    {
+        return $prices[PriceProductStorageConfig::PRICE_DATA_BY_PRICE_TYPE][$priceProductTransfer->getPriceTypeName()] ?? $prices[PriceProductStorageConfig::PRICE_DATA] ?? null;
+    }
+
+    /**
      * @param string $currencyCode
      * @param string $priceType
-     * @param \Generated\Shared\Transfer\PriceProductTransfer[] $priceProductTransfers
+     * @param array $priceProductTransfers
      *
      * @return \Generated\Shared\Transfer\PriceProductTransfer
      */
