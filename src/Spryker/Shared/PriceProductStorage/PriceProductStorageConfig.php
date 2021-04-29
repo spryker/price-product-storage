@@ -12,8 +12,6 @@ use Spryker\Shared\Kernel\AbstractSharedConfig;
 class PriceProductStorageConfig extends AbstractSharedConfig
 {
     /**
-     * @deprecated Use {@link \Spryker\Shared\PriceProductStorage\PriceProductStorageConfig::PRICE_DATA_BY_PRICE_TYPE} instead.
-     *
      * @see \Spryker\Shared\PriceProduct\PriceProductConfig::PRICE_DATA
      */
     public const PRICE_DATA = 'priceData';
