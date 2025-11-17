@@ -11,6 +11,8 @@ use Generated\Shared\Transfer\PriceProductStorageTransfer;
 use Spryker\Client\Kernel\Locator;
 use Spryker\Client\PriceProductStorage\Dependency\Client\PriceProductStorageToStorageInterface;
 use Spryker\Client\PriceProductStorage\PriceProductStorageConfig;
+use Spryker\Client\PriceProductStorageExtension\Dependency\Plugin\StorePriceProductStoragePriceDimensionPluginInterface;
+use Spryker\Client\PriceProductStorageExtension\Dependency\Plugin\StorePriceProductStoragePricesExtractorPluginInterface;
 use Spryker\Shared\PriceProductStorage\PriceProductStorageConstants;
 
 class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
@@ -66,15 +68,20 @@ class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    public function findPriceProductConcreteTransfers($idProductConcrete): array
+    public function findPriceProductConcreteTransfers($idProductConcrete, ?string $storeName = null): array
     {
         $priceProductTransfers = [];
 
         foreach ($this->priceDimensionPlugins as $priceDimensionPlugin) {
+            if ($priceDimensionPlugin instanceof StorePriceProductStoragePriceDimensionPluginInterface && $storeName) {
+                $priceProductTransfers = array_merge($priceProductTransfers, $priceDimensionPlugin->findProductConcretePricesForStore($idProductConcrete, $storeName));
+
+                continue;
+            }
             $priceProductTransfers = array_merge($priceProductTransfers, $priceDimensionPlugin->findProductConcretePrices($idProductConcrete));
         }
 
-        $priceProductTransfers = array_merge($priceProductTransfers, $this->findDefaultPriceDimensionPriceProductTransfers($idProductConcrete));
+        $priceProductTransfers = array_merge($priceProductTransfers, $this->findDefaultPriceDimensionPriceProductTransfers($idProductConcrete, $storeName));
 
         return $priceProductTransfers;
     }
@@ -84,9 +91,9 @@ class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    protected function findDefaultPriceDimensionPriceProductTransfers(int $idProductConcrete): array
+    protected function findDefaultPriceDimensionPriceProductTransfers(int $idProductConcrete, ?string $storeName = null): array
     {
-        $priceData = $this->findProductConcretePriceData($idProductConcrete);
+        $priceData = $this->findProductConcretePriceData($idProductConcrete, $storeName);
 
         if (!$priceData) {
             return [];
@@ -96,7 +103,7 @@ class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
         $priceProductStorageTransfer->fromArray($priceData, true);
 
         $priceProductTransfers = $this->priceProductMapper->mapPriceProductStorageTransferToPriceProductTransfers($priceProductStorageTransfer);
-        $priceProductTransfers = $this->applyPriceProductExtractorPlugins($idProductConcrete, $priceProductTransfers);
+        $priceProductTransfers = $this->applyPriceProductExtractorPlugins($idProductConcrete, $priceProductTransfers, $storeName);
 
         return $priceProductTransfers;
     }
@@ -106,7 +113,7 @@ class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
      *
      * @return array|null
      */
-    protected function findProductConcretePriceData(int $idProductConcrete): ?array
+    protected function findProductConcretePriceData(int $idProductConcrete, ?string $storeName = null): ?array
     {
         if (PriceProductStorageConfig::isCollectorCompatibilityMode()) {
             $clientLocatorClass = Locator::class;
@@ -121,7 +128,7 @@ class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
             return $priceData;
         }
 
-        $key = $this->priceStorageKeyGenerator->generateKey(PriceProductStorageConstants::PRICE_CONCRETE_RESOURCE_NAME, $idProductConcrete);
+        $key = $this->priceStorageKeyGenerator->generateKey(PriceProductStorageConstants::PRICE_CONCRETE_RESOURCE_NAME, $idProductConcrete, $storeName);
         $priceData = $this->storageClient->get($key);
 
         return $priceData;
@@ -133,9 +140,14 @@ class PriceConcreteStorageReader implements PriceConcreteStorageReaderInterface
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    protected function applyPriceProductExtractorPlugins(int $idProductConcrete, array $priceProductTransfers): array
+    protected function applyPriceProductExtractorPlugins(int $idProductConcrete, array $priceProductTransfers, ?string $storeName = null): array
     {
         foreach ($this->priceProductExtractorPlugins as $extractorPlugin) {
+            if ($extractorPlugin instanceof StorePriceProductStoragePricesExtractorPluginInterface && $storeName) {
+                $priceProductTransfers = array_merge($priceProductTransfers, $extractorPlugin->extractProductPricesForProductConcreteForStore($idProductConcrete, $priceProductTransfers, $storeName));
+
+                continue;
+            }
             $priceProductTransfers = array_merge(
                 $priceProductTransfers,
                 $extractorPlugin->extractProductPricesForProductConcrete($idProductConcrete, $priceProductTransfers),

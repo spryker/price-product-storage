@@ -52,12 +52,12 @@ class PriceProductStorageKeyGenerator implements PriceProductStorageKeyGenerator
      *
      * @return string
      */
-    public function generateKey($resourceName, $resourceId)
+    public function generateKey($resourceName, $resourceId, $storeName = null)
     {
         $synchronizationDataTransfer = new SynchronizationDataTransfer();
         $synchronizationDataTransfer
             ->setReference($resourceId)
-            ->setStore($this->getCurrentStoreName());
+            ->setStore($storeName ?? $this->getCurrentStoreName());
 
         return $this->getStorageKeyBuilder($resourceName)->generateKey($synchronizationDataTransfer);
     }

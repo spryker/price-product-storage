@@ -11,8 +11,9 @@ interface PriceConcreteStorageReaderInterface
 {
     /**
      * @param int $idProductConcrete
+     * @param string|null $storeName
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    public function findPriceProductConcreteTransfers($idProductConcrete): array;
+    public function findPriceProductConcreteTransfers($idProductConcrete, ?string $storeName = null): array;
 }

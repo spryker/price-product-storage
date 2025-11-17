@@ -1,0 +1,4 @@
+"Abstract product price in Storage","Zusammenfassender Preis des vorrätigen Produkts"
+"Concrete product price in Storage","Preis des vorrätigen Produkts"
+"Abstract product price in a table spy_price_product_abstract_storage","Zusammenfassender Preis des vorrätigen Produkts in der Tabelle spy_price_product_abstract_storage"
+"Concrete product price in a table spy_price_product_concrete_storage","Preis des vorrätigen Produkts in der Tabelle spy_price_product_concrete_storage"

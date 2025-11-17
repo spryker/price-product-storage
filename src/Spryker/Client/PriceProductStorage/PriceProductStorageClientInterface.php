@@ -20,10 +20,11 @@ interface PriceProductStorageClientInterface
      * @api
      *
      * @param int $idProductAbstract
+     * @param string|null $storeName
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    public function getPriceProductAbstractTransfers(int $idProductAbstract): array;
+    public function getPriceProductAbstractTransfers(int $idProductAbstract, ?string $storeName = null): array;
 
     /**
      * Specification:
@@ -32,10 +33,11 @@ interface PriceProductStorageClientInterface
      * @api
      *
      * @param int $idProductConcrete
+     * @param string|null $storeName
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    public function getPriceProductConcreteTransfers(int $idProductConcrete): array;
+    public function getPriceProductConcreteTransfers(int $idProductConcrete, ?string $storeName = null): array;
 
     /**
      * Specification:

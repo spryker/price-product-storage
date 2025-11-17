@@ -66,7 +66,7 @@ class PriceAbstractStorageReader implements PriceAbstractStorageReaderInterface
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    public function findPriceProductAbstractTransfers(int $idProductAbstract): array
+    public function findPriceProductAbstractTransfers(int $idProductAbstract, ?string $storeName = null): array
     {
         $priceProductTransfers = [];
 
@@ -74,7 +74,7 @@ class PriceAbstractStorageReader implements PriceAbstractStorageReaderInterface
             $priceProductTransfers = array_merge($priceProductTransfers, $priceDimensionPlugin->findProductAbstractPrices($idProductAbstract));
         }
 
-        $priceProductTransfers = array_merge($priceProductTransfers, $this->findDefaultPriceDimensionPriceProductTransfers($idProductAbstract));
+        $priceProductTransfers = array_merge($priceProductTransfers, $this->findDefaultPriceDimensionPriceProductTransfers($idProductAbstract, $storeName));
 
         return $priceProductTransfers;
     }
@@ -84,9 +84,9 @@ class PriceAbstractStorageReader implements PriceAbstractStorageReaderInterface
      *
      * @return array<\Generated\Shared\Transfer\PriceProductTransfer>
      */
-    protected function findDefaultPriceDimensionPriceProductTransfers(int $idProductAbstract): array
+    protected function findDefaultPriceDimensionPriceProductTransfers(int $idProductAbstract, ?string $storeName = null): array
     {
-        $priceData = $this->findProductAbstractPriceData($idProductAbstract);
+        $priceData = $this->findProductAbstractPriceData($idProductAbstract, $storeName);
 
         if (!$priceData) {
             return [];
@@ -106,7 +106,7 @@ class PriceAbstractStorageReader implements PriceAbstractStorageReaderInterface
      *
      * @return array|null
      */
-    protected function findProductAbstractPriceData(int $idProductAbstract): ?array
+    protected function findProductAbstractPriceData(int $idProductAbstract, ?string $storeName = null): ?array
     {
         if (PriceProductStorageConfig::isCollectorCompatibilityMode()) {
             $clientLocatorClass = Locator::class;
@@ -121,7 +121,7 @@ class PriceAbstractStorageReader implements PriceAbstractStorageReaderInterface
             return $priceData;
         }
 
-        $key = $this->priceStorageKeyGenerator->generateKey(PriceProductStorageConstants::PRICE_ABSTRACT_RESOURCE_NAME, $idProductAbstract);
+        $key = $this->priceStorageKeyGenerator->generateKey(PriceProductStorageConstants::PRICE_ABSTRACT_RESOURCE_NAME, $idProductAbstract, $storeName);
         $priceData = $this->storageClient->get($key);
 
         return $priceData;

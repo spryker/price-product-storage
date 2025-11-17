@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\PriceProductStorage;
 
+use Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToEventBehaviorFacadeBridge;
@@ -46,6 +47,11 @@ class PriceProductStorageDependencyProvider extends AbstractBundleDependencyProv
     public const FACADE_STORE = 'FACADE_STORE';
 
     /**
+     * @var string
+     */
+    public const CLIENT_PRICE_PRODUCT_STORAGE = 'CLIENT_PRICE_PRODUCT_STORAGE';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -74,6 +80,8 @@ class PriceProductStorageDependencyProvider extends AbstractBundleDependencyProv
             return new PriceProductStorageToStoreFacadeBridge($container->getLocator()->store()->facade());
         });
 
+        $container = $this->addPriceProductStorageClient($container);
+
         return $container;
     }
 
@@ -90,6 +98,20 @@ class PriceProductStorageDependencyProvider extends AbstractBundleDependencyProv
 
         $container->set(static::QUERY_CONTAINER_PRICE_PRODUCT, function (Container $container) {
             return new PriceProductStorageToPriceProductQueryContainerBridge($container->getLocator()->priceProduct()->queryContainer());
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addPriceProductStorageClient(Container $container): Container
+    {
+        $container->set(static::CLIENT_PRICE_PRODUCT_STORAGE, function (Container $container): PriceProductStorageClientInterface {
+            return $container->getLocator()->priceProductStorage()->client();
         });
 
         return $container;

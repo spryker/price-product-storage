@@ -82,4 +82,38 @@
         <property name="priceDimension" type="PriceProductDimension"/>
         <property name="productConcreteToAbstractIdMaps" type="array" associative="true" singular="productConcreteToAbstractIdMap"/>
     </transfer>
+
+    <transfer name="PriceProductAbstractStorageCriteria">
+        <property name="priceProductAbstractStorageConditions" type="PriceProductAbstractStorageConditions"/>
+    </transfer>
+
+    <transfer name="PriceProductAbstractStorageConditions">
+        <property name="productAbstractIds" type="int[]" singular="productAbstractId"/>
+    </transfer>
+
+    <transfer name="PriceProductConcreteStorageCriteria">
+        <property name="priceProductConcreteStorageConditions" type="PriceProductConcreteStorageConditions"/>
+    </transfer>
+
+    <transfer name="PriceProductConcreteStorageConditions">
+        <property name="productConcreteIds" type="int[]" singular="productConcreteId"/>
+    </transfer>
+
+    <transfer name="ProductReadiness" strict="true">
+        <property name="title" type="string"/>
+    </transfer>
+
+    <transfer name="ProductAbstractReadinessRequest" strict="true">
+        <property name="productAbstract" type="ProductAbstract"/>
+    </transfer>
+
+    <transfer name="ProductConcreteReadinessRequest" strict="true">
+        <property name="productConcrete" type="ProductConcrete"/>
+    </transfer>
+
+    <transfer name="ProductAbstract">
+    </transfer>
+
+    <transfer name="ProductConcrete">
+    </transfer>
 </transfers>

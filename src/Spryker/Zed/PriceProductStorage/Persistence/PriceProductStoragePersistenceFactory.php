@@ -10,11 +10,13 @@ namespace Spryker\Zed\PriceProductStorage\Persistence;
 use Orm\Zed\PriceProductStorage\Persistence\SpyPriceProductAbstractStorageQuery;
 use Orm\Zed\PriceProductStorage\Persistence\SpyPriceProductConcreteStorageQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use Spryker\Zed\PriceProductStorage\Persistence\Propel\Mapper\PriceProductStorageMapper;
 use Spryker\Zed\PriceProductStorage\PriceProductStorageDependencyProvider;
 
 /**
  * @method \Spryker\Zed\PriceProductStorage\PriceProductStorageConfig getConfig()
  * @method \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageQueryContainerInterface getQueryContainer()
+ * @method \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface getRepository()
  */
 class PriceProductStoragePersistenceFactory extends AbstractPersistenceFactory
 {
@@ -48,5 +50,13 @@ class PriceProductStoragePersistenceFactory extends AbstractPersistenceFactory
     public function getProductQueryContainer()
     {
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::QUERY_CONTAINER_PRODUCT);
+    }
+
+    /**
+     * @return \Spryker\Zed\PriceProductStorage\Persistence\Propel\Mapper\PriceProductStorageMapper
+     */
+    public function createPriceProductStorageMapper(): PriceProductStorageMapper
+    {
+        return new PriceProductStorageMapper();
     }
 }

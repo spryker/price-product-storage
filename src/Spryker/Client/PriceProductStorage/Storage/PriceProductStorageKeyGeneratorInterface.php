@@ -12,8 +12,9 @@ interface PriceProductStorageKeyGeneratorInterface
     /**
      * @param string $resourceName
      * @param int $resourceId
+     * @param string|null $storeName
      *
      * @return string
      */
-    public function generateKey($resourceName, $resourceId);
+    public function generateKey($resourceName, $resourceId, $storeName = null);
 }
