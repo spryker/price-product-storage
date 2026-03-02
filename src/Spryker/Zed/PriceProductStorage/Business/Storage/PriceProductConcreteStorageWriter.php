@@ -245,9 +245,6 @@ class PriceProductConcreteStorageWriter implements PriceProductConcreteStorageWr
         return $priceGroups;
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\PriceProductCriteriaTransfer
-     */
     protected function getPriceCriteriaTransfer(): PriceProductCriteriaTransfer
     {
         return (new PriceProductCriteriaTransfer())

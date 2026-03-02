@@ -34,10 +34,6 @@ class PriceProductStorageKeyGenerator implements PriceProductStorageKeyGenerator
      */
     protected static $storageKeyBuilders = [];
 
-    /**
-     * @param \Spryker\Client\PriceProductStorage\Dependency\Service\PriceProductStorageToSynchronizationServiceInterface $synchronizationService
-     * @param \Spryker\Client\PriceProductStorage\Dependency\Client\PriceProductStorageToStoreClientInterface $storeClient
-     */
     public function __construct(
         PriceProductStorageToSynchronizationServiceInterface $synchronizationService,
         PriceProductStorageToStoreClientInterface $storeClient
@@ -62,11 +58,6 @@ class PriceProductStorageKeyGenerator implements PriceProductStorageKeyGenerator
         return $this->getStorageKeyBuilder($resourceName)->generateKey($synchronizationDataTransfer);
     }
 
-    /**
-     * @param string $resourceName
-     *
-     * @return \Spryker\Service\Synchronization\Dependency\Plugin\SynchronizationKeyGeneratorPluginInterface
-     */
     protected function getStorageKeyBuilder(string $resourceName): SynchronizationKeyGeneratorPluginInterface
     {
         if (!isset(static::$storageKeyBuilders[$resourceName])) {
@@ -76,9 +67,6 @@ class PriceProductStorageKeyGenerator implements PriceProductStorageKeyGenerator
         return static::$storageKeyBuilders[$resourceName];
     }
 
-    /**
-     * @return string
-     */
     protected function getCurrentStoreName(): string
     {
         if (!static::$currentStoreName) {

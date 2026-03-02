@@ -30,10 +30,6 @@ class StoragePriceProductConcreteReadinessProvider implements PriceProductConcre
      */
     protected const FORMAT_STORE_SEPARATOR = ', ';
 
-    /**
-     * @param \Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface $priceProductStorageClient
-     * @param \Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToStoreFacadeInterface $storeFacade
-     */
     public function __construct(
         protected PriceProductStorageClientInterface $priceProductStorageClient,
         protected PriceProductStorageToStoreFacadeInterface $storeFacade
@@ -83,12 +79,6 @@ class StoragePriceProductConcreteReadinessProvider implements PriceProductConcre
         return $storeNames;
     }
 
-    /**
-     * @param int $idProductConcrete
-     * @param string|null $storeName
-     *
-     * @return bool
-     */
     protected function hasPriceDataInStorage(int $idProductConcrete, ?string $storeName = null): bool
     {
         $priceProductTransfers = $this->priceProductStorageClient->getPriceProductConcreteTransfers($idProductConcrete, $storeName);

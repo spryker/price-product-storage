@@ -20,10 +20,5 @@ interface PriceConcreteResolverInterface
      */
     public function resolvePriceProductConcrete(int $idProductConcrete, int $idProductAbstract): array;
 
-    /**
-     * @param \Generated\Shared\Transfer\PriceProductFilterTransfer $priceProductFilterTransfer
-     *
-     * @return \Generated\Shared\Transfer\CurrentProductPriceTransfer
-     */
     public function resolveCurrentProductPriceTransfer(PriceProductFilterTransfer $priceProductFilterTransfer): CurrentProductPriceTransfer;
 }

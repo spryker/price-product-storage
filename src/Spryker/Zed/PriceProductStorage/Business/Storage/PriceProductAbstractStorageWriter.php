@@ -244,12 +244,6 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
         return $priceGroupsCollection;
     }
 
-    /**
-     * @param array $productAbstractPriceGroups
-     * @param int $idProductAbstract
-     *
-     * @return array
-     */
     protected function getProductAbstractPriceStoreGroups(array $productAbstractPriceGroups, int $idProductAbstract): array
     {
         $priceGroupsCollection = [];
@@ -262,9 +256,6 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
         return $priceGroupsCollection;
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\PriceProductCriteriaTransfer
-     */
     protected function getPriceCriteriaTransfer(): PriceProductCriteriaTransfer
     {
         return (new PriceProductCriteriaTransfer())

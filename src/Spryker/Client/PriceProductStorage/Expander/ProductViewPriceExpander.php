@@ -158,11 +158,6 @@ class ProductViewPriceExpander implements ProductViewPriceExpanderInterface
         return $this->priceConcreteStorageReader->findPriceProductConcreteTransfers($productViewTransfer->getIdProductConcrete());
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ProductViewTransfer $productViewTransfer
-     *
-     * @return \Generated\Shared\Transfer\PriceProductFilterTransfer
-     */
     protected function getPriceProductFilterFromProductView(ProductViewTransfer $productViewTransfer): PriceProductFilterTransfer
     {
         $priceProductFilterTransfer = (new PriceProductFilterTransfer())

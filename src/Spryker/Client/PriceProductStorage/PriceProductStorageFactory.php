@@ -65,9 +65,6 @@ class PriceProductStorageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Client\PriceProductStorage\Storage\PriceConcreteResolverInterface
-     */
     public function createPriceConcreteResolver(): PriceConcreteResolverInterface
     {
         return new PriceConcreteResolver(
@@ -78,9 +75,6 @@ class PriceProductStorageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Spryker\Client\PriceProductStorage\Validator\PriceProductItemValidatorInterface
-     */
     public function createPriceProductItemValidator(): PriceProductItemValidatorInterface
     {
         return new PriceProductItemValidator(
@@ -128,9 +122,6 @@ class PriceProductStorageFactory extends AbstractFactory
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::SERVICE_SYNCHRONIZATION);
     }
 
-    /**
-     * @return \Spryker\Client\PriceProductStorage\Dependency\Service\PriceProductStorageToPriceProductServiceInterface
-     */
     public function getPriceProductService(): PriceProductStorageToPriceProductServiceInterface
     {
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::SERVICE_PRICE_PRODUCT);
@@ -144,9 +135,6 @@ class PriceProductStorageFactory extends AbstractFactory
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::PLUGIN_STORAGE_PRICE_DIMENSION);
     }
 
-    /**
-     * @return \Spryker\Client\PriceProductStorage\Storage\PriceProductMapperInterface
-     */
     public function createPriceProductMapper(): PriceProductMapperInterface
     {
         return new PriceProductMapper(

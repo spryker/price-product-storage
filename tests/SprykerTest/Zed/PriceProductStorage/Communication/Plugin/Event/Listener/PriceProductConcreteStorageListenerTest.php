@@ -54,9 +54,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
      */
     protected $priceProductTransfer;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -77,9 +74,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->priceProductTransfer = $this->tester->havePriceProduct($priceProductOverride);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductConcretePublishStorageListenerStoreData(): void
     {
         // Prepare
@@ -100,9 +94,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertPriceProductConcreteStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductConcretePublishStoragePublishListener(): void
     {
         // Prepare
@@ -123,9 +114,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertPriceProductConcreteStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductConcretePublishStorageUnPublishListener(): void
     {
         // Prepare
@@ -143,9 +131,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertSame(0, SpyPriceProductConcreteStorageQuery::create()->filterByFkProduct($this->priceProductTransfer->getIdProduct())->count());
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductConcreteStorageListenerStoreData(): void
     {
         SpyPriceProductConcreteStorageQuery::create()->filterByFkProduct($this->priceProductTransfer->getIdProduct())->delete();
@@ -165,9 +150,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertPriceProductConcreteStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductConcreteEntityStoragePublishListener(): void
     {
         // Prepare
@@ -190,9 +172,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertPriceProductConcreteStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductConcreteEntityStorageUnpublishListener(): void
     {
         // Prepare
@@ -212,9 +191,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertSame(0, SpyPriceProductConcreteStorageQuery::create()->filterByFkProduct($this->priceProductTransfer->getIdProduct())->count());
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductStoreConcreteStorageListenerStoreData(): void
     {
         // Prepare
@@ -245,9 +221,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertGreaterThan($beforeCount, $priceProductConcreteStorageCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceTypeProductConcreteStorageListenerStoreData(): void
     {
         // Prepare
@@ -275,9 +248,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertGreaterThan($beforeCount, $priceProductConcreteStorageCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceTypeProductConcreteStoragePublishListener(): void
     {
         // Prepare
@@ -305,9 +275,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertGreaterThan($beforeCount, $priceProductConcreteStorageCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceTypeProductConcreteStorageUnpublishListener(): void
     {
         // Prepare
@@ -331,9 +298,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         $this->assertSame(0, SpyPriceProductConcreteStorageQuery::create()->filterByFkProduct_In($productConcreteIds)->count());
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\PriceProductStorageFacade
-     */
     protected function getPriceProductStorageFacade(): PriceProductStorageFacade
     {
         $factory = new PriceProductStorageBusinessFactory();
@@ -345,11 +309,6 @@ class PriceProductConcreteStorageListenerTest extends Unit
         return $facade;
     }
 
-    /**
-     * @param int $beforeCount
-     *
-     * @return void
-     */
     protected function assertPriceProductConcreteStorage(int $beforeCount): void
     {
         $priceProductConcreteStorageCount = SpyPriceProductConcreteStorageQuery::create()->count();

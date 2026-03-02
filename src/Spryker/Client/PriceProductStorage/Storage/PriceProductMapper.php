@@ -28,9 +28,6 @@ class PriceProductMapper implements PriceProductMapperInterface
      */
     protected $priceProductService;
 
-    /**
-     * @param \Spryker\Client\PriceProductStorage\Dependency\Service\PriceProductStorageToPriceProductServiceInterface $priceProductService
-     */
     public function __construct(PriceProductStorageToPriceProductServiceInterface $priceProductService)
     {
         $this->priceProductService = $priceProductService;
@@ -86,12 +83,6 @@ class PriceProductMapper implements PriceProductMapperInterface
         }
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\PriceProductTransfer $priceProductTransfer
-     * @param array $prices
-     *
-     * @return \Generated\Shared\Transfer\PriceProductTransfer
-     */
     protected function setPriceData(PriceProductTransfer $priceProductTransfer, array $prices): PriceProductTransfer
     {
         $moneyValueTransfer = $priceProductTransfer->getMoneyValue();
@@ -108,12 +99,6 @@ class PriceProductMapper implements PriceProductMapperInterface
         return $priceProductTransfer;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\PriceProductTransfer $priceProductTransfer
-     * @param array $prices
-     *
-     * @return string|null
-     */
     protected function resolvePriceData(PriceProductTransfer $priceProductTransfer, array $prices): ?string
     {
         $priceTypeName = $priceProductTransfer->getPriceTypeName();

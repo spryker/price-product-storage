@@ -37,9 +37,6 @@ class PriceProductStorageCommunicationTester extends Actor
      */
     public const PROJECT_SUITE = 'suite';
 
-    /**
-     * @return bool
-     */
     public function isSuiteProject(): bool
     {
         if (getenv(static::PARAM_PROJECT) === static::PROJECT_SUITE) {

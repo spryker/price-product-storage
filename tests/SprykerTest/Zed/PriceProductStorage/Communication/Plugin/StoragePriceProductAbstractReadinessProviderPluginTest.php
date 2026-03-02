@@ -32,9 +32,6 @@ use Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToStore
  */
 class StoragePriceProductAbstractReadinessProviderPluginTest extends Unit
 {
-    /**
-     * @return void
-     */
     public function testProvideReturnsStoresWithPriceData(): void
     {
         // Arrange
@@ -60,9 +57,6 @@ class StoragePriceProductAbstractReadinessProviderPluginTest extends Unit
         $this->assertSame('DE, US', $productReadiness->getValues()[0]);
     }
 
-    /**
-     * @return void
-     */
     public function testProvideReturnsDashWhenNoPriceDataExists(): void
     {
         // Arrange
@@ -83,9 +77,6 @@ class StoragePriceProductAbstractReadinessProviderPluginTest extends Unit
         $this->assertSame('-', $result->getArrayCopy()[0]->getValues()[0]);
     }
 
-    /**
-     * @return void
-     */
     public function testProvideReturnsDashWhenNoStoresProvided(): void
     {
         // Arrange
@@ -103,11 +94,6 @@ class StoragePriceProductAbstractReadinessProviderPluginTest extends Unit
         $this->assertSame('-', $result->getArrayCopy()[0]->getValues()[0]);
     }
 
-    /**
-     * @param \Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface $priceProductStorageClientMock
-     *
-     * @return \Spryker\Zed\PriceProductStorage\Communication\Plugin\ProductManagement\StoragePriceProductAbstractReadinessProviderPlugin
-     */
     protected function createPluginWithMocks(
         PriceProductStorageClientInterface $priceProductStorageClientMock
     ): StoragePriceProductAbstractReadinessProviderPlugin {

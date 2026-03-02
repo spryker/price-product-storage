@@ -37,10 +37,6 @@ class StorageTablePriceProductConcreteReadinessProvider implements PriceProductC
      */
     protected const KEY_STORE = 'store';
 
-    /**
-     * @param \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface $priceProductStorageRepository
-     * @param \Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToStoreFacadeInterface $storeFacade
-     */
     public function __construct(
         protected PriceProductStorageRepositoryInterface $priceProductStorageRepository,
         protected PriceProductStorageToStoreFacadeInterface $storeFacade

@@ -34,12 +34,6 @@ class PriceConcreteResolver implements PriceConcreteResolverInterface
      */
     protected $priceProductClient;
 
-    /**
-     * @param \Spryker\Client\PriceProductStorage\Storage\PriceAbstractStorageReaderInterface $priceAbstractStorageReader
-     * @param \Spryker\Client\PriceProductStorage\Storage\PriceConcreteStorageReaderInterface $priceConcreteStorageReader
-     * @param \Spryker\Client\PriceProductStorage\Dependency\Service\PriceProductStorageToPriceProductServiceInterface $priceProductService
-     * @param \Spryker\Client\PriceProductStorage\Dependency\Client\PriceProductStorageToPriceProductClientInterface $priceProductClient
-     */
     public function __construct(
         PriceAbstractStorageReaderInterface $priceAbstractStorageReader,
         PriceConcreteStorageReaderInterface $priceConcreteStorageReader,
@@ -72,11 +66,6 @@ class PriceConcreteResolver implements PriceConcreteResolverInterface
         );
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\PriceProductFilterTransfer $priceProductFilterTransfer
-     *
-     * @return \Generated\Shared\Transfer\CurrentProductPriceTransfer
-     */
     public function resolveCurrentProductPriceTransfer(PriceProductFilterTransfer $priceProductFilterTransfer): CurrentProductPriceTransfer
     {
         $priceProductFilterTransfer->requireIdProduct();

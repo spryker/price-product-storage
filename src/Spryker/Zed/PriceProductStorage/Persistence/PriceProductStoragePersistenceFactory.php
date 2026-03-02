@@ -52,9 +52,6 @@ class PriceProductStoragePersistenceFactory extends AbstractPersistenceFactory
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::QUERY_CONTAINER_PRODUCT);
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Persistence\Propel\Mapper\PriceProductStorageMapper
-     */
     public function createPriceProductStorageMapper(): PriceProductStorageMapper
     {
         return new PriceProductStorageMapper();

@@ -35,9 +35,6 @@ class ExpandProductViewPriceDataTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function testExpandProductViewPriceDataEnsureThatPriceProductExpanderPluginStackExecuted(): void
     {
         // Arrange
@@ -51,9 +48,6 @@ class ExpandProductViewPriceDataTest extends Unit
             ->expandProductViewPriceData($productViewTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function testExpandProductViewPriceDataEnsureThatPriceProductFilterExpanderPluginStackExecuted(): void
     {
         // Arrange

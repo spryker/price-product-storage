@@ -254,11 +254,6 @@ class PriceProductStorageEventSubscriber extends AbstractPlugin implements Event
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_STORE_CREATE, new PriceProductStoreAbstractStorageListener(), 0, null, $this->getConfig()->getPriceProductAbstractEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductStoreAbstractUpdateStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_STORE_UPDATE, new PriceProductStoreAbstractStorageListener(), 0, null, $this->getConfig()->getPriceProductAbstractEventQueueName());
@@ -274,61 +269,31 @@ class PriceProductStorageEventSubscriber extends AbstractPlugin implements Event
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_STORE_DELETE, new PriceProductStoreAbstractStorageListener(), 0, null, $this->getConfig()->getPriceProductAbstractEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductDefaultAbstractCreateStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_DEFAULT_CREATE, new PriceProductDefaultAbstractStorageListener(), 0, null, $this->getConfig()->getPriceProductAbstractEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductDefaultAbstractUpdateStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_DEFAULT_UPDATE, new PriceProductDefaultAbstractStorageListener(), 0, null, $this->getConfig()->getPriceProductAbstractEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductDefaultAbstractDeleteStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_DEFAULT_DELETE, new PriceProductDefaultAbstractStorageListener(), 0, null, $this->getConfig()->getPriceProductAbstractEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductDefaultConcreteCreateStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_DEFAULT_CREATE, new PriceProductDefaultConcreteStorageListener(), 0, null, $this->getConfig()->getPriceProductConcreteEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductDefaultConcreteUpdateStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_DEFAULT_UPDATE, new PriceProductDefaultConcreteStorageListener(), 0, null, $this->getConfig()->getPriceProductConcreteEventQueueName());
     }
 
-    /**
-     * @param \Spryker\Zed\Event\Dependency\EventCollectionInterface $eventCollection
-     *
-     * @return void
-     */
     protected function addPriceProductDefaultConcreteDeleteStorageListener(EventCollectionInterface $eventCollection): void
     {
         $eventCollection->addListenerQueued(PriceProductEvents::ENTITY_SPY_PRICE_PRODUCT_DEFAULT_DELETE, new PriceProductDefaultConcreteStorageListener(), 0, null, $this->getConfig()->getPriceProductConcreteEventQueueName());

@@ -36,9 +36,6 @@ class PriceProductAbstractStorageWriterTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     public function testPublishTwoAbstractProductsOnlyOneWithPrice(): void
     {
         // Prepare
@@ -65,9 +62,6 @@ class PriceProductAbstractStorageWriterTest extends Unit
         );
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\Storage\PriceProductAbstractStorageWriterInterface
-     */
     protected function createPriceProductAbstractStorageWriter(): PriceProductAbstractStorageWriterInterface
     {
         return new PriceProductAbstractStorageWriter(
@@ -78,9 +72,6 @@ class PriceProductAbstractStorageWriterTest extends Unit
         );
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageQueryContainerInterface
-     */
     protected function createPriceProductStorageQueryContainer(): PriceProductStorageQueryContainerInterface
     {
         return new PriceProductStorageQueryContainer();

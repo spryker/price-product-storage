@@ -52,9 +52,6 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\Provider\PriceProductAbstractReadinessProviderInterface
-     */
     public function createStorageTablePriceProductAbstractReadinessProvider(): PriceProductAbstractReadinessProviderInterface
     {
         return new StorageTablePriceProductAbstractReadinessProvider(
@@ -63,9 +60,6 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\Provider\PriceProductAbstractReadinessProviderInterface
-     */
     public function createStoragePriceProductAbstractReadinessProvider(): PriceProductAbstractReadinessProviderInterface
     {
         return new StoragePriceProductAbstractReadinessProvider(
@@ -74,9 +68,6 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\Provider\PriceProductConcreteReadinessProviderInterface
-     */
     public function createStorageTablePriceProductConcreteReadinessProvider(): PriceProductConcreteReadinessProviderInterface
     {
         return new StorageTablePriceProductConcreteReadinessProvider(
@@ -85,9 +76,6 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
         );
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\Provider\PriceProductConcreteReadinessProviderInterface
-     */
     public function createStoragePriceProductConcreteReadinessProvider(): PriceProductConcreteReadinessProviderInterface
     {
         return new StoragePriceProductConcreteReadinessProvider(
@@ -112,9 +100,6 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::FACADE_STORE);
     }
 
-    /**
-     * @return \Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface
-     */
     protected function getPriceProductStorageClient(): PriceProductStorageClientInterface
     {
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::CLIENT_PRICE_PRODUCT_STORAGE);

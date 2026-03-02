@@ -103,11 +103,6 @@ class PriceProductStorageDependencyProvider extends AbstractBundleDependencyProv
         return $container;
     }
 
-    /**
-     * @param \Spryker\Zed\Kernel\Container $container
-     *
-     * @return \Spryker\Zed\Kernel\Container
-     */
     protected function addPriceProductStorageClient(Container $container): Container
     {
         $container->set(static::CLIENT_PRICE_PRODUCT_STORAGE, function (Container $container): PriceProductStorageClientInterface {

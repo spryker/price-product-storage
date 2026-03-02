@@ -29,19 +29,11 @@ class PriceProductItemValidator implements PriceProductItemValidatorInterface
      */
     protected $priceConcreteResolver;
 
-    /**
-     * @param \Spryker\Client\PriceProductStorage\Storage\PriceConcreteResolverInterface $priceConcreteResolver
-     */
     public function __construct(PriceConcreteResolverInterface $priceConcreteResolver)
     {
         $this->priceConcreteResolver = $priceConcreteResolver;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\ItemValidationTransfer $itemValidationTransfer
-     *
-     * @return \Generated\Shared\Transfer\ItemValidationTransfer
-     */
     public function validate(ItemValidationTransfer $itemValidationTransfer): ItemValidationTransfer
     {
         $itemValidationTransfer->requireItem();

@@ -31,9 +31,6 @@ use Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInt
  */
 class StorageTablePriceProductAbstractReadinessProviderPluginTest extends Unit
 {
-    /**
-     * @return void
-     */
     public function testProvideReturnsStoresWithPriceData(): void
     {
         // Arrange
@@ -55,9 +52,6 @@ class StorageTablePriceProductAbstractReadinessProviderPluginTest extends Unit
         $this->assertSame('DE, US', $productReadiness->getValues()[0]);
     }
 
-    /**
-     * @return void
-     */
     public function testProvideReturnsNoWhenNoPriceDataExists(): void
     {
         // Arrange
@@ -79,9 +73,6 @@ class StorageTablePriceProductAbstractReadinessProviderPluginTest extends Unit
         $this->assertSame('-', $productReadiness->getValues()[0]);
     }
 
-    /**
-     * @return void
-     */
     public function testProvideReturnsOnlyOneStoreWhenPartialStoreCoverage(): void
     {
         // Arrange
@@ -103,11 +94,6 @@ class StorageTablePriceProductAbstractReadinessProviderPluginTest extends Unit
         $this->assertSame('DE', $productReadiness->getValues()[0]);
     }
 
-    /**
-     * @param \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface $repositoryMock
-     *
-     * @return \Spryker\Zed\PriceProductStorage\Communication\Plugin\ProductManagement\StorageTablePriceProductAbstractReadinessProviderPlugin
-     */
     protected function createPluginWithMocks(PriceProductStorageRepositoryInterface $repositoryMock): StorageTablePriceProductAbstractReadinessProviderPlugin
     {
         $provider = new StorageTablePriceProductAbstractReadinessProvider(

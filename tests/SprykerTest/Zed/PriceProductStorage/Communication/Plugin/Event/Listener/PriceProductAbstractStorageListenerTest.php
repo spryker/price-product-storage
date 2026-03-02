@@ -57,9 +57,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
      */
     protected $priceProductTransfer;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -78,9 +75,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->priceProductTransfer = $this->tester->havePriceProduct($priceProductOverride);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductAbstractPublishStorageListenerStoreData(): void
     {
         // Prepare
@@ -101,9 +95,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertPriceProductAbstractStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductAbstractStoragePublishListener(): void
     {
         // Prepare
@@ -124,9 +115,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertPriceProductAbstractStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductAbstractStorageUnpublishListener(): void
     {
         // Prepare
@@ -144,9 +132,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertSame(0, SpyPriceProductAbstractStorageQuery::create()->filterByFkProductAbstract($this->priceProductTransfer->getIdProductAbstract())->count());
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductAbstractStorageListenerStoreData(): void
     {
         // Prepare
@@ -169,9 +154,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertPriceProductAbstractStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductAbstractEntityStoragePublishListener(): void
     {
         // Prepare
@@ -194,9 +176,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertPriceProductAbstractStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceProductStoreAbstractStorageListenerStoreData(): void
     {
         // Prepare
@@ -225,9 +204,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertPriceProductAbstractStorage($beforeCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceTypeProductAbstractStorageListenerStoreData(): void
     {
         // Prepare
@@ -255,9 +231,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertGreaterThanOrEqual($beforeCount + count($productAbstractIds), $priceProductAbstractStorageCount);
     }
 
-    /**
-     * @return void
-     */
     public function testPriceTypeProductAbstractEntityStoragePublishListener(): void
     {
         // Prepare
@@ -285,9 +258,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         $this->assertGreaterThanOrEqual($beforeCount + count($productAbstractIds), $priceProductAbstractStorageCount);
     }
 
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Business\PriceProductStorageFacade
-     */
     protected function getPriceProductStorageFacade(): PriceProductStorageFacade
     {
         $factory = new PriceProductStorageBusinessFactory();
@@ -299,11 +269,6 @@ class PriceProductAbstractStorageListenerTest extends Unit
         return $facade;
     }
 
-    /**
-     * @param int $beforeCount
-     *
-     * @return void
-     */
     protected function assertPriceProductAbstractStorage(int $beforeCount): void
     {
         $priceProductAbstractStorageCount = SpyPriceProductAbstractStorageQuery::create()->count();
