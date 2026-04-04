@@ -18,3 +18,5 @@ suites:
         modules:
             enabled:
                 - Asserts
+                - \SprykerTest\Shared\Propel\Helper\TransactionHelper
+                - \SprykerTest\Shared\Testify\Helper\DependencyHelper
