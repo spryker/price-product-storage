@@ -12,6 +12,7 @@
         "spryker/price-product-storage-extension": "^1.4.0",
         "spryker/product": "^5.5.0 || ^6.0.0",
         "spryker/product-management-extension": "^1.9.0",
+        "spryker/propel": "^3.47.0",
         "spryker/propel-orm": "^1.5.0",
         "spryker/quick-order-extension": "^1.1.0",
         "spryker/storage": "^3.4.0",
@@ -25,7 +26,6 @@
         "spryker/code-sniffer": "*",
         "spryker/event": "*",
         "spryker/product-storage": "*",
-        "spryker/propel": "*",
         "spryker/testify": "*"
     },
     "suggest": {

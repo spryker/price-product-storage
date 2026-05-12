@@ -16,10 +16,12 @@ use Spryker\Shared\PriceProductStorage\PriceProductStorageConstants;
 use Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToPriceProductFacadeInterface;
 use Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToStoreFacadeInterface;
 use Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageQueryContainerInterface;
+use Spryker\Zed\Propel\Persistence\BatchProcessor\ActiveRecordBatchProcessorTrait;
 
 class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWriterInterface
 {
     use LoggerTrait;
+    use ActiveRecordBatchProcessorTrait;
 
     /**
      * @var \Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToPriceProductFacadeInterface
@@ -128,8 +130,10 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
         }
 
         array_walk_recursive($priceProductAbstractStorageMap, function (SpyPriceProductAbstractStorage $priceProductAbstractStorageEntity) {
-            $priceProductAbstractStorageEntity->delete();
+            $this->remove($priceProductAbstractStorageEntity);
         });
+
+        $this->commit();
     }
 
     /**
@@ -185,7 +189,7 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
             ->setData($priceProductStorageTransfer->toArray())
             ->setIsSendingToQueue($this->isSendingToQueue);
 
-        $priceProductAbstractStorageEntity->save();
+        $this->persist($priceProductAbstractStorageEntity);
     }
 
     /**
@@ -196,7 +200,7 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
     protected function deletePriceProduct(SpyPriceProductAbstractStorage $priceProductAbstractStorageEntity)
     {
         if (!$priceProductAbstractStorageEntity->isNew()) {
-            $priceProductAbstractStorageEntity->delete();
+            $this->remove($priceProductAbstractStorageEntity);
         }
     }
 
@@ -280,12 +284,7 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
         return $priceProductAbstractStorageMap;
     }
 
-    /**
-     * @param int $idStore
-     *
-     * @return string
-     */
-    protected function getStoreNameById($idStore)
+    protected function getStoreNameById(int $idStore): string
     {
         if (!$this->storeNameMapBuffer) {
             $this->loadStoreNameMap();
@@ -294,10 +293,7 @@ class PriceProductAbstractStorageWriter implements PriceProductAbstractStorageWr
         return $this->storeNameMapBuffer[$idStore];
     }
 
-    /**
-     * @return void
-     */
-    protected function loadStoreNameMap()
+    protected function loadStoreNameMap(): void
     {
         $storeTransfers = $this->storeFacade->getAllStores();
 
