@@ -87,4 +87,17 @@ interface PriceProductStorageClientInterface
      * @return \Generated\Shared\Transfer\ItemValidationTransfer
      */
     public function validateItemProductPrice(ItemValidationTransfer $itemValidationTransfer): ItemValidationTransfer;
+
+    /**
+     * Specification:
+     * - Fetches multiple storage entries by their keys in a single batch request.
+     * - Returns an array keyed by "kv:{key}" with the raw stored value (string or null) per key.
+     *
+     * @api
+     *
+     * @param array<string> $keys
+     *
+     * @return array<string, string|null>
+     */
+    public function getRawPriceCollection(array $keys): array;
 }

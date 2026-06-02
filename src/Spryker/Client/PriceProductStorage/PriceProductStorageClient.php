@@ -99,4 +99,18 @@ class PriceProductStorageClient extends AbstractClient implements PriceProductSt
             ->createPriceProductItemValidator()
             ->validate($itemValidationTransfer);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<string> $keys
+     *
+     * @return array<string, string|null>
+     */
+    public function getRawPriceCollection(array $keys): array
+    {
+        return $this->getFactory()->createPriceProductStorageMultiReader()->getRawPriceCollection($keys);
+    }
 }

@@ -56,7 +56,7 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
     {
         return new StorageTablePriceProductAbstractReadinessProvider(
             $this->getRepository(),
-            $this->getStoreFacade(),
+            $this->getPriceProductStorageClient(),
         );
     }
 
@@ -72,7 +72,7 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
     {
         return new StorageTablePriceProductConcreteReadinessProvider(
             $this->getRepository(),
-            $this->getStoreFacade(),
+            $this->getPriceProductStorageClient(),
         );
     }
 
@@ -100,7 +100,7 @@ class PriceProductStorageBusinessFactory extends AbstractBusinessFactory
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::FACADE_STORE);
     }
 
-    protected function getPriceProductStorageClient(): PriceProductStorageClientInterface
+    public function getPriceProductStorageClient(): PriceProductStorageClientInterface
     {
         return $this->getProvidedDependency(PriceProductStorageDependencyProvider::CLIENT_PRICE_PRODUCT_STORAGE);
     }

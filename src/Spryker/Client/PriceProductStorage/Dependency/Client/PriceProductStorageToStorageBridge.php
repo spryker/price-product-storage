@@ -31,4 +31,14 @@ class PriceProductStorageToStorageBridge implements PriceProductStorageToStorage
     {
         return $this->storageClient->get($key);
     }
+
+    /**
+     * @param array<string> $keys
+     *
+     * @return array<string, string|null>
+     */
+    public function getMulti(array $keys): array
+    {
+        return $this->storageClient->getMulti($keys);
+    }
 }

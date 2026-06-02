@@ -11,11 +11,10 @@ use ArrayObject;
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\ProductConcreteReadinessRequestTransfer;
 use Generated\Shared\Transfer\ProductConcreteTransfer;
-use Generated\Shared\Transfer\StoreTransfer;
+use Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface;
 use Spryker\Zed\PriceProductStorage\Business\PriceProductStorageBusinessFactory;
 use Spryker\Zed\PriceProductStorage\Business\Provider\StorageTablePriceProductConcreteReadinessProvider;
 use Spryker\Zed\PriceProductStorage\Communication\Plugin\ProductManagement\StorageTablePriceProductConcreteReadinessProviderPlugin;
-use Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToStoreFacadeInterface;
 use Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface;
 
 /**
@@ -31,92 +30,156 @@ use Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInt
  */
 class StorageTablePriceProductConcreteReadinessProviderPluginTest extends Unit
 {
-    public function testProvideReturnsStoresWithPriceData(): void
+    protected const string STORAGE_KEY = 'price-product-concrete:de:456';
+
+    protected const string STORAGE_KEY_URL_PART = '/storage-gui/maintenance/key?key=';
+
+    public function testProvideReturnsFallbackWhenNoDataExists(): void
     {
         // Arrange
-        $plugin = $this->createPluginWithMocks($this->createPriceProductStorageRepositoryMockWithData());
-        $productConcrete = (new ProductConcreteTransfer())->setIdProductConcrete(123);
-        $productConcreteReadinessRequestTransfer = (new ProductConcreteReadinessRequestTransfer())
-            ->setProductConcrete($productConcrete);
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([]),
+            $this->createStorageClientMockReturning([]),
+        );
 
         // Act
         $result = $plugin->provide(
-            $productConcreteReadinessRequestTransfer,
+            $this->createRequest(456),
             new ArrayObject(),
         );
 
         // Assert
         $this->assertCount(1, $result->getArrayCopy());
-        $productReadiness = $result->getArrayCopy()[0];
-        $this->assertSame('Concrete product price in a table spy_price_product_concrete_storage', $productReadiness->getTitle());
-        $this->assertSame('DE, US', $productReadiness->getValues()[0]);
+        $this->assertSame('-', $result->getArrayCopy()[0]->getValues()[0]);
     }
 
-    public function testProvideReturnsDashWhenNoPriceDataExists(): void
+    public function testProvideReturnsStorageKeyLinkWhenStorageKeyExists(): void
     {
         // Arrange
-        $plugin = $this->createPluginWithMocks($this->createPriceProductStorageRepositoryMockWithNoData());
-        $productConcrete = (new ProductConcreteTransfer())->setIdProductConcrete(456);
-        $productConcreteReadinessRequestTransfer = (new ProductConcreteReadinessRequestTransfer())
-            ->setProductConcrete($productConcrete);
-
-        // Act
-        $result = $plugin->provide(
-            $productConcreteReadinessRequestTransfer,
-            new ArrayObject(),
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([
+                $this->buildStorageRow('DE', static::STORAGE_KEY, null, null),
+            ]),
+            $this->createStorageClientMockReturning([]),
         );
 
+        // Act
+        $result = $plugin->provide($this->createRequest(456), new ArrayObject());
+
         // Assert
-        $this->assertCount(1, $result->getArrayCopy());
-        $productReadiness = $result->getArrayCopy()[0];
-        $this->assertSame('Concrete product price in a table spy_price_product_concrete_storage', $productReadiness->getTitle());
-        $this->assertSame('-', $productReadiness->getValues()[0]);
+        $row = $result->getArrayCopy()[0]->getValues()[0];
+        $this->assertStringContainsString(static::STORAGE_KEY_URL_PART . static::STORAGE_KEY, $row);
     }
 
-    public function testProvideReturnsOnlyOneStoreWhenPartialStoreCoverage(): void
+    public function testProvideReturnsSyncedStatusWhenStorageMatchesDatabase(): void
     {
         // Arrange
-        $plugin = $this->createPluginWithMocks($this->createPriceProductStorageRepositoryMockWithOneStore());
-        $productConcrete = (new ProductConcreteTransfer())->setIdProductConcrete(789);
-        $productConcreteReadinessRequestTransfer = (new ProductConcreteReadinessRequestTransfer())
-            ->setProductConcrete($productConcrete);
-
-        // Act
-        $result = $plugin->provide(
-            $productConcreteReadinessRequestTransfer,
-            new ArrayObject(),
+        $dbData = ['prices' => ['EUR' => 100, 'USD' => 120]];
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([
+                $this->buildStorageRow('DE', static::STORAGE_KEY, $dbData, '2024-01-15 10:30:00'),
+            ]),
+            $this->createStorageClientMockReturning([
+                'kv:' . static::STORAGE_KEY => json_encode(array_merge($dbData, ['_timestamp' => 1705315800])),
+            ]),
         );
 
+        // Act
+        $result = $plugin->provide($this->createRequest(456), new ArrayObject());
+
         // Assert
-        $this->assertCount(1, $result->getArrayCopy());
-        $productReadiness = $result->getArrayCopy()[0];
-        $this->assertSame('Concrete product price in a table spy_price_product_concrete_storage', $productReadiness->getTitle());
-        $this->assertSame('DE', $productReadiness->getValues()[0]);
+        $row = $result->getArrayCopy()[0]->getValues()[0];
+        $this->assertStringContainsString('Synced', $row);
+        $this->assertStringContainsString('EUR, USD', $row);
+        $this->assertStringContainsString('DE', $row);
+        $this->assertStringContainsString('2024-01-15 10:30:00 UTC', $row);
     }
 
-    public function testProvideRemovesDuplicateStores(): void
+    public function testProvideReturnsUnsyncedStatusWhenStorageKeyIsMissing(): void
+    {
+        // Arrange - storage key present in DB row but storage returns nothing for it
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([
+                $this->buildStorageRow('DE', static::STORAGE_KEY, ['prices' => []], null),
+            ]),
+            $this->createStorageClientMockReturning([]),
+        );
+
+        // Act
+        $result = $plugin->provide($this->createRequest(456), new ArrayObject());
+
+        // Assert
+        $row = $result->getArrayCopy()[0]->getValues()[0];
+        $this->assertStringContainsString('Unsynced', $row);
+        $this->assertStringContainsString(static::STORAGE_KEY_URL_PART . static::STORAGE_KEY, $row);
+    }
+
+    public function testProvideReturnsUnsyncedStatusWhenRowHasNoStorageKey(): void
+    {
+        // Arrange - no key column means product was never synced to storage
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([
+                $this->buildStorageRow('US', null, null, null),
+            ]),
+            $this->createStorageClientMockReturning([]),
+        );
+
+        // Act
+        $result = $plugin->provide($this->createRequest(456), new ArrayObject());
+
+        // Assert
+        $row = $result->getArrayCopy()[0]->getValues()[0];
+        $this->assertStringContainsString('Unsynced', $row);
+        // No link when key is absent
+        $this->assertStringNotContainsString(static::STORAGE_KEY_URL_PART, $row);
+    }
+
+    public function testProvideReturnsUnsyncedStatusWhenDataDiffersFromStorage(): void
     {
         // Arrange
-        $plugin = $this->createPluginWithMocks($this->createPriceProductStorageRepositoryMockWithDuplicateStores());
-        $productConcrete = (new ProductConcreteTransfer())->setIdProductConcrete(999);
-        $productConcreteReadinessRequestTransfer = (new ProductConcreteReadinessRequestTransfer())
-            ->setProductConcrete($productConcrete);
-
-        // Act
-        $result = $plugin->provide(
-            $productConcreteReadinessRequestTransfer,
-            new ArrayObject(),
+        $dbData = ['prices' => ['EUR' => 100]];
+        $storageData = ['prices' => ['EUR' => 200]]; // different price
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([
+                $this->buildStorageRow('DE', static::STORAGE_KEY, $dbData, null),
+            ]),
+            $this->createStorageClientMockReturning([
+                'kv:' . static::STORAGE_KEY => json_encode(array_merge($storageData, ['_timestamp' => 1705315800])),
+            ]),
         );
 
+        // Act
+        $result = $plugin->provide($this->createRequest(456), new ArrayObject());
+
         // Assert
-        $this->assertSame('DE, US', $result->getArrayCopy()[0]->getValues()[0]);
+        $this->assertStringContainsString('Unsynced', $result->getArrayCopy()[0]->getValues()[0]);
     }
 
-    protected function createPluginWithMocks(PriceProductStorageRepositoryInterface $repositoryMock): StorageTablePriceProductConcreteReadinessProviderPlugin
+    public function testProvideReturnsOneValuePerStorageRow(): void
     {
+        // Arrange
+        $plugin = $this->createPlugin(
+            $this->createRepositoryMockReturning([
+                $this->buildStorageRow('DE', null, null, null),
+                $this->buildStorageRow('US', null, null, null),
+            ]),
+            $this->createStorageClientMockReturning([]),
+        );
+
+        // Act
+        $result = $plugin->provide($this->createRequest(456), new ArrayObject());
+
+        // Assert
+        $this->assertCount(2, $result->getArrayCopy()[0]->getValues());
+    }
+
+    protected function createPlugin(
+        PriceProductStorageRepositoryInterface $repositoryMock,
+        PriceProductStorageClientInterface $storageClientMock,
+    ): StorageTablePriceProductConcreteReadinessProviderPlugin {
         $provider = new StorageTablePriceProductConcreteReadinessProvider(
             $repositoryMock,
-            $this->createStoreFacadeMock(),
+            $storageClientMock,
         );
 
         $factoryMock = $this->getMockBuilder(PriceProductStorageBusinessFactory::class)
@@ -135,111 +198,41 @@ class StorageTablePriceProductConcreteReadinessProviderPluginTest extends Unit
     /**
      * @return \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function createPriceProductStorageRepositoryMockWithData(): PriceProductStorageRepositoryInterface
+    protected function createRepositoryMockReturning(array $data): PriceProductStorageRepositoryInterface
     {
-        $repositoryMock = $this->getMockBuilder(PriceProductStorageRepositoryInterface::class)
-            ->getMock();
+        $mock = $this->getMockBuilder(PriceProductStorageRepositoryInterface::class)->getMock();
+        $mock->method('getPriceProductConcretesByCriteria')->willReturn($data);
 
-        $priceProductStorageData = [
-            [
-                'fk_product' => 123,
-                'store' => 'DE',
-                'data' => '{}',
-            ],
-            [
-                'fk_product' => 123,
-                'store' => 'US',
-                'data' => '{}',
-            ],
-        ];
-
-        $repositoryMock->method('getPriceProductConcretesByCriteria')->willReturn($priceProductStorageData);
-
-        return $repositoryMock;
+        return $mock;
     }
 
     /**
-     * @return \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Spryker\Client\PriceProductStorage\PriceProductStorageClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function createPriceProductStorageRepositoryMockWithNoData(): PriceProductStorageRepositoryInterface
+    protected function createStorageClientMockReturning(array $data): PriceProductStorageClientInterface
     {
-        $repositoryMock = $this->getMockBuilder(PriceProductStorageRepositoryInterface::class)
-            ->getMock();
+        $mock = $this->getMockBuilder(PriceProductStorageClientInterface::class)->getMock();
+        $mock->method('getRawPriceCollection')->willReturn($data);
 
-        $repositoryMock->method('getPriceProductConcretesByCriteria')->willReturn([]);
+        return $mock;
+    }
 
-        return $repositoryMock;
+    protected function createRequest(int $idProductConcrete): ProductConcreteReadinessRequestTransfer
+    {
+        return (new ProductConcreteReadinessRequestTransfer())
+            ->setProductConcrete((new ProductConcreteTransfer())->setIdProductConcrete($idProductConcrete));
     }
 
     /**
-     * @return \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @param array<string, mixed>|null $data
      */
-    protected function createPriceProductStorageRepositoryMockWithOneStore(): PriceProductStorageRepositoryInterface
+    protected function buildStorageRow(string $store, ?string $storageKey, ?array $data, ?string $updatedAt): array
     {
-        $repositoryMock = $this->getMockBuilder(PriceProductStorageRepositoryInterface::class)
-            ->getMock();
-
-        $priceProductStorageData = [
-            [
-                'fk_product' => 789,
-                'store' => 'DE',
-                'data' => '{}',
-            ],
+        return [
+            'store' => $store,
+            'key' => $storageKey,
+            'data' => $data,
+            'updated_at' => $updatedAt,
         ];
-
-        $repositoryMock->method('getPriceProductConcretesByCriteria')->willReturn($priceProductStorageData);
-
-        return $repositoryMock;
-    }
-
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Persistence\PriceProductStorageRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createPriceProductStorageRepositoryMockWithDuplicateStores(): PriceProductStorageRepositoryInterface
-    {
-        $repositoryMock = $this->getMockBuilder(PriceProductStorageRepositoryInterface::class)
-            ->getMock();
-
-        $priceProductStorageData = [
-            [
-                'fk_product' => 999,
-                'store' => 'DE',
-                'data' => '{}',
-            ],
-            [
-                'fk_product' => 999,
-                'store' => 'US',
-                'data' => '{}',
-            ],
-            [
-                'fk_product' => 999,
-                'store' => 'DE',
-                'data' => '{}',
-            ],
-        ];
-
-        $repositoryMock->method('getPriceProductConcretesByCriteria')->willReturn($priceProductStorageData);
-
-        return $repositoryMock;
-    }
-
-    /**
-     * @return \Spryker\Zed\PriceProductStorage\Dependency\Facade\PriceProductStorageToStoreFacadeInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createStoreFacadeMock(): PriceProductStorageToStoreFacadeInterface
-    {
-        $storeFacadeMock = $this->getMockBuilder(PriceProductStorageToStoreFacadeInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAllStores'])
-            ->getMock();
-
-        $stores = [
-            (new StoreTransfer())->setName('DE'),
-            (new StoreTransfer())->setName('US'),
-        ];
-
-        $storeFacadeMock->method('getAllStores')->willReturn($stores);
-
-        return $storeFacadeMock;
     }
 }

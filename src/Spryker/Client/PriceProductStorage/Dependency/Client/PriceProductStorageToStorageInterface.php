@@ -15,4 +15,11 @@ interface PriceProductStorageToStorageInterface
      * @return mixed
      */
     public function get($key);
+
+    /**
+     * @param array<string> $keys
+     *
+     * @return array<string, string|null>
+     */
+    public function getMulti(array $keys): array;
 }
