@@ -12,6 +12,8 @@ use Spryker\Shared\Kernel\AbstractSharedConfig;
 class PriceProductStorageConfig extends AbstractSharedConfig
 {
     /**
+     * @api
+     *
      * @see \Spryker\Shared\PriceProduct\PriceProductConfig::PRICE_DATA
      *
      * @var string
@@ -19,6 +21,8 @@ class PriceProductStorageConfig extends AbstractSharedConfig
     public const PRICE_DATA = 'priceData';
 
     /**
+     * @api
+     *
      * @uses \Spryker\Shared\PriceProduct\PriceProductConfig::PRICE_DATA_BY_PRICE_TYPE
      *
      * @var string
@@ -26,6 +30,8 @@ class PriceProductStorageConfig extends AbstractSharedConfig
     public const PRICE_DATA_BY_PRICE_TYPE = 'priceDataByPriceType';
 
     /**
+     * @api
+     *
      * @see \Spryker\Shared\Price\PriceConfig::PRICE_MODE_NET
      *
      * @var string
@@ -33,6 +39,8 @@ class PriceProductStorageConfig extends AbstractSharedConfig
     public const PRICE_NET_MODE = 'NET_MODE';
 
     /**
+     * @api
+     *
      * @see \Spryker\Shared\Price\PriceConfig::PRICE_MODE_GROSS
      *
      * @var string
@@ -40,6 +48,8 @@ class PriceProductStorageConfig extends AbstractSharedConfig
     public const PRICE_GROSS_MODE = 'GROSS_MODE';
 
     /**
+     * @api
+     *
      * @see \Spryker\Shared\PriceProduct\PriceProductConfig::PRICE_MODES
      *
      * @var array<string>
@@ -50,6 +60,8 @@ class PriceProductStorageConfig extends AbstractSharedConfig
     ];
 
     /**
+     * @api
+     *
      * Defines queue name for publish.
      *
      * @var string
@@ -57,6 +69,8 @@ class PriceProductStorageConfig extends AbstractSharedConfig
     public const PUBLISH_PRICE_PRODUCT_ABSTRACT = 'publish.price_product_abstract';
 
     /**
+     * @api
+     *
      * Defines queue name for publish.
      *
      * @var string
