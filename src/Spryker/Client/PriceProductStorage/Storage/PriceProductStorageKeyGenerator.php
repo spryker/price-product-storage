@@ -45,6 +45,7 @@ class PriceProductStorageKeyGenerator implements PriceProductStorageKeyGenerator
     /**
      * @param string $resourceName
      * @param int $resourceId
+     * @param string|null $storeName
      *
      * @return string
      */
