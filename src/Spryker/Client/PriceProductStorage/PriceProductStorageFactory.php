@@ -10,6 +10,7 @@ namespace Spryker\Client\PriceProductStorage;
 use Spryker\Client\Kernel\AbstractFactory;
 use Spryker\Client\PriceProductStorage\Dependency\Service\PriceProductStorageToPriceProductServiceInterface;
 use Spryker\Client\PriceProductStorage\Expander\ProductViewPriceExpander;
+use Spryker\Client\PriceProductStorage\Expander\ProductViewPriceExpanderInterface;
 use Spryker\Client\PriceProductStorage\Storage\PriceAbstractStorageReader;
 use Spryker\Client\PriceProductStorage\Storage\PriceConcreteResolver;
 use Spryker\Client\PriceProductStorage\Storage\PriceConcreteResolverInterface;
@@ -24,19 +25,25 @@ use Spryker\Client\PriceProductStorage\Validator\PriceProductItemValidatorInterf
 
 class PriceProductStorageFactory extends AbstractFactory
 {
+    protected ?ProductViewPriceExpanderInterface $productViewPriceExpander = null;
+
     /**
      * @return \Spryker\Client\PriceProductStorage\Expander\ProductViewPriceExpanderInterface
      */
     public function createProductViewPriceExpander()
     {
-        return new ProductViewPriceExpander(
-            $this->createPriceAbstractStorageReader(),
-            $this->createPriceConcreteStorageReader(),
-            $this->getPriceProductClient(),
-            $this->getPriceProductService(),
-            $this->getPriceProductFilterExpanderPlugins(),
-            $this->getPriceProductExpanderPlugins(),
-        );
+        if ($this->productViewPriceExpander === null) {
+            return $this->productViewPriceExpander = new ProductViewPriceExpander(
+                $this->createPriceAbstractStorageReader(),
+                $this->createPriceConcreteStorageReader(),
+                $this->getPriceProductClient(),
+                $this->getPriceProductService(),
+                $this->getPriceProductFilterExpanderPlugins(),
+                $this->getPriceProductExpanderPlugins(),
+            );
+        }
+
+        return $this->productViewPriceExpander;
     }
 
     /**
