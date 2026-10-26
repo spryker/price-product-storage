@@ -101,6 +101,7 @@
 
     <transfer name="ProductReadiness" strict="true">
         <property name="title" type="string"/>
+        <property name="values" type="string[]" singular="value"/>
     </transfer>
 
     <transfer name="ProductAbstractReadinessRequest" strict="true">
@@ -115,5 +116,6 @@
     </transfer>
 
     <transfer name="ProductConcrete">
+        <property name="idProductConcrete" type="int"/>
     </transfer>
 </transfers>
